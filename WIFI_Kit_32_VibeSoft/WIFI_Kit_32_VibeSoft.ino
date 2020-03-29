@@ -26,7 +26,6 @@
 #include "heltec.h"
 #include "WiFi.h"
 #include "images.h"
-#include <string>
 
 
 void logo(){
