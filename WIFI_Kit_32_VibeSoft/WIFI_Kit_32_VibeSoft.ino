@@ -42,7 +42,7 @@ void WIFISetUp(void)
 	delay(1000);
 	WiFi.mode(WIFI_STA);
 	WiFi.setAutoConnect(true);
-	WiFi.begin("TLWR702N", "Mesd@3700");
+	WiFi.begin("WIFI SSID", "Password");
 	delay(100);
 
 	byte count = 0;
