@@ -13,7 +13,7 @@
  * ------------------------------------------------------------------
  * 2020-03-29 Additions (VinZ68) 
  * Hardware info:
- *  - Sketch optimized for this ESP32 Development board: https://www.aliexpress.com/item/32842293108.html?spm=a2g0s.9042311.0.0.27424c4dVgt86e
+ *  - Sketch for this ESP32 Development board: https://www.aliexpress.com/item/32842293108.html?spm=a2g0s.9042311.0.0.27424c4dVgt86e
  *  - HiLetgo product page:  https://www.amazon.com/gp/product/B07DKD79Y9/ref=od_aui_detailpages02?ie=UTF8&psc=1
  *  - The OLED is an SSD1306, 128x64 pixels, blue.
  *  Software changes:
