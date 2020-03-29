@@ -13,7 +13,8 @@ ESP32 Development board with:
 - CP2102 Module USB to serial chip, the perfect support for Arduino development environment
 
 
-## The documentation
+## [The documentation](https://www.amazon.com/gp/product/B07DKD79Y9/ref=od_aui_detailpages02?ie=UTF8&psc=1)
+Additional documentation, used in the source code
 [681 pages manual - ESP32](https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf)
-
-
+[Heltec files, install guide and bunches of info](https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series)
+[OLED SSD1306 Driver Library - u8g2](https://github.com/olikraus/u8g2)
