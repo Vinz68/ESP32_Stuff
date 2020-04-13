@@ -14,7 +14,7 @@ ESP32 Development board called *["WiFi Kit 32"](https://heltec.org/project/wifi-
 - CP2102 Module USB to serial chip 
 
 
-![alt text](https://raw.githubusercontent.com/Vinz68/ESP32_Stuff/master/resources/WiFi_Kit_32.png "WIFI KIT 32 Developer Board")
+![](https://raw.githubusercontent.com/Vinz68/ESP32_Stuff/master/resources/WiFi_Kit_32.png "WIFI KIT 32 Developer Board")
 
 
 ## [The Code]()
@@ -33,4 +33,9 @@ Additional documentation, used in the source code
 - [681 pages manual - ESP32](https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf)
 - [Heltec files, install guide and bunches of info](https://github.com/Heltec-Aaron-Lee/WiFi_Kit_series)
 - [OLED SSD1306 Driver Library - u8g2](https://github.com/olikraus/u8g2)
+
+
+I2C Scanner with a I2C Gyro sensor (MPU-6050
+![I2C Scanner with a I2C Gyro sensor (MPU-6050](https://raw.githubusercontent.com/Vinz68/ESP32_Stuff/master/resources/I2C_Scanner.png "I2C Scanner with a I2C Gyro sensor (MPU-6050)")
+
 
