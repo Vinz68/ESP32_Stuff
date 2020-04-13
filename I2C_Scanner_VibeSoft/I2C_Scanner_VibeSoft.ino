@@ -1,71 +1,121 @@
-/* Heltec Automation I2C scanner example (also it's a basic example how to use I2C1)
- *
- * ESP32 have two I2C (I2C0 and I2C1) bus
- *
- * OLED is connected to I2C0, so if scan with Wire (I2C0), the return address should be 0x3C.
- *
- * If you need scan other device address in I2C1...
- *		- Comment all Wire.***() codes;
- * 		- Uncomment all Wire1.***() codes;
- *
- * I2C scan example and I2C0
- *
- * HelTec AutoMation, Chengdu, China
- * 成都惠利特自动化科技有限公司
- * www.heltec.org
- *
- * this project also realess in GitHub:
- * https://github.com/HelTecAutomation/Heltec_ESP32
- * */
-
+/*--------------------------------------------------------------------------------------------------------
+ * I2C_Scanner_VibeSoft is a scanner that shows the addresses of connected I2C devices. 
+ * -------------------------------------------------------------------------------------------------------
+ * ESP32 have two I2C busses: I2C0 and I2C1.
+ * For the WIFI_KIT_32, the OLED is connected to I2C0, 
+ * so if scan with Wire (I2C0), the return address should be 0x3C.
+ * 
+ * Best practise is to use I2C1 for your connected I2C devices.
+ * Note: For I2C1, SDA = GPIO 21 and SCL is GPIO 22.
+ * 
+ * This demo code:
+ * - Scans the 2nd I2C bus (I2C1) and 
+ * - Outputs the address of every found device on the OLED 
+ * - Outputs the address on the Serial port (Arduino Serial Monitor)
+ * 
+ * This is a great scanner to see if your attached I2C device is connected properly
+ * -------------------------------------------------------------------------------------------------------
+*/
 #include "Arduino.h"
 #include "heltec.h"
+#include "images.h"
+
+void logo()
+{
+	Heltec.display->clear();
+	Heltec.display->drawXbm(0, 0, logo_width, logo_height, (const unsigned char *)logo_bits);
+	Heltec.display->drawString(8, 42, "I2C_Scanner_VibeSoft");
+	Heltec.display->drawString(35, 53, "Version 0.2");
+	Heltec.display->display();
+}
 
 void setup()
 {
-	Heltec.begin(true, false, true);
-	//Wire.begin(SDA_OLED, SCL_OLED); //Scan OLED's I2C address via I2C0
-	Wire1.begin(SDA, SCL);        //If there have other device on I2C1, scan the device address via I2C1
+	Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
+	logo();
+	delay(5000);
+	Heltec.display->clear();
+	Wire1.begin(SDA, SCL);   // Scan the device address via I2C1
+}
+
+
+void printInfo(String info, int line)
+{
+	// Show Info on Serial Monitor
+	Serial.println(info);
+
+	// Show Info on OLED display
+	Heltec.display->drawString(0, line * 10, info);
+	Heltec.display->display();
+	delay(500);
 }
 
 void loop()
 {
 	byte error, address;
 	int nDevices;
-
-	Serial.println("Scanning...");
+  int line;
+  
+  Heltec.display->clear();
+  String showInfo = "Scanning...";
+	printInfo(showInfo, 0);
 
 	nDevices = 0;
+  line = 0;
 	for(address = 1; address < 127; address++ )
 	{
-		// Wire.beginTransmission(address);
-		// error = Wire.endTransmission();
-
-		Wire1.beginTransmission(address);
-		error = Wire1.endTransmission();
+    Wire1.beginTransmission(address);
+    error = Wire1.endTransmission();
 
 		if (error == 0)
 		{
-			Serial.print("I2C device found at address 0x");
-			if (address<16)
-			Serial.print("0");
-			Serial.print(address,HEX);
-			Serial.println("  !");
+		  if (nDevices==0)
+			{
+				Heltec.display->clear();
+				showInfo = "I2C device(s) found at: ";
+				printInfo(showInfo, 0);
+			}
 
+			showInfo = "- address: 0x";
+			if (address<16)
+				showInfo = showInfo + "0";
+			showInfo = showInfo + (String(address,HEX));
 			nDevices++;
+      line++;
+			printInfo(showInfo, line);
 		}
 		else if (error==4)
 		{
-			Serial.print("Unknown error at address 0x");
-			if (address<16)
-				Serial.print("0");
-			Serial.println(address,HEX);
+      showInfo = "Error at address 0x";
+
+      if (address<16)
+        showInfo = showInfo + "0";
+      
+      showInfo = showInfo + (String(address,HEX));
+      line++;
+      printInfo(showInfo, line);      
 		}
+
+    if (line>7)
+    {
+      // Does not fit on OLED, so delay and continue on clear screen.
+      delay(4000);
+      Heltec.display->clear();
+      showInfo = "..continued I2C found at: ";
+      printInfo(showInfo, 0);     
+      line = 0;  
+    }
 	}
 	if (nDevices == 0)
-	Serial.println("No I2C devices found\n");
+	{
+		showInfo = "No I2C devices found";
+		printInfo(showInfo, 1);
+	}
 	else
-	Serial.println("done\n");
+	{
+		showInfo = "Done";
+		printInfo(showInfo, nDevices+1);		
+	}
 
-	delay(5000);
+	delay(4000);
 }
