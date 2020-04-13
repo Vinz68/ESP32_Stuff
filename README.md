@@ -1,5 +1,6 @@
 # ESP32_Stuff
 ESP32 code for my ESP32 Development board, using Arduino IDE.
+<img src="https://raw.githubusercontent.com/Vinz68/ESP32_Stuff/master/resources/WiFi_Kit_32.jpg" width="400"></img> 
 
 
 ## [The hardware](https://www.aliexpress.com/item/32842293108.html?spm=a2g0s.9042311.0.0.27424c4dVgt86e)
