@@ -22,9 +22,9 @@ ESP32 Development board called *["WiFi Kit 32"](https://heltec.org/project/wifi-
 | Code                    | Description                                   | Pins used        |
 | ----------------------- | --------------------------------------------- | ----------------:|
 | I2C_Scanner_VibeSoft    | Scans for I2C devices on 2nd I2C bus          | SDA on GPIO 21   |
-|                         |                                               | SCL on GPIO 22   |
+|                         | Output on OLED display and serial port.       | SCL on GPIO 22   |
 |  |  | 
-| WIFI_KIT_32_VibeSoft    | Example Wifi scanner with minor modifications | *not applicable* |
+| WIFI_KIT_32_VibeSoft    | Wifi scanner with minor modifications         | *not applicable* |
 |                         |                                               |                  |
 |  |  | 
 
