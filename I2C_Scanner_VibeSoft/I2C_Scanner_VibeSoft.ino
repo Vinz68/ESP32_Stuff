@@ -35,6 +35,7 @@ void setup()
 	logo();
 	delay(5000);
 	Heltec.display->clear();
+  
 	Wire1.begin(SDA, SCL);   // Scan the device address via I2C1
 }
 
@@ -78,8 +79,8 @@ void loop()
 
 			showInfo = "- address: 0x";
 			if (address<16)
-				showInfo = showInfo + "0";
-			showInfo = showInfo + (String(address,HEX));
+				showInfo += "0";
+			showInfo += (String(address,HEX));
 			nDevices++;
       line++;
 			printInfo(showInfo, line);
@@ -89,9 +90,9 @@ void loop()
       showInfo = "Error at address 0x";
 
       if (address<16)
-        showInfo = showInfo + "0";
+        showInfo += "0";
       
-      showInfo = showInfo + (String(address,HEX));
+      showInfo += (String(address,HEX));
       line++;
       printInfo(showInfo, line);      
 		}
