@@ -35,7 +35,7 @@ Additional documentation, used in the source code
 - [OLED SSD1306 Driver Library - u8g2](https://github.com/olikraus/u8g2)
 
 
-I2C Scanner with a I2C Gyro sensor (MPU-6050
+I2C Scanner at work with a I2C Gyro sensor (MPU-6050)
 ![I2C Scanner with a I2C Gyro sensor (MPU-6050](https://raw.githubusercontent.com/Vinz68/ESP32_Stuff/master/resources/I2C_Scanner.png "I2C Scanner with a I2C Gyro sensor (MPU-6050)")
 
 
