@@ -24,8 +24,12 @@ ESP32 Development board called *["WiFi Kit 32"](https://heltec.org/project/wifi-
 | I2C_Scanner_VibeSoft    | Scans for I2C devices on 2nd I2C bus          | SDA on GPIO 21   |
 |                         | Output on OLED display and serial port.       | SCL on GPIO 22   |
 |  |  | 
+| Sensor_MPU6050          | Gyro Sensor, read X,Y and Z angles            | SDA on GPIO 21   |
+|  || SCL on GPIO 22   | 
+|  || INT on GPIO 2   | 
+|  |  |
 | WIFI_KIT_32_VibeSoft    | Wifi scanner with minor modifications         | *not applicable* |
-|                         |                                               |                  |
+|  |  |
 |  |  | 
 
 ## [The documentation](https://www.amazon.com/gp/product/B07DKD79Y9/ref=od_aui_detailpages02?ie=UTF8&psc=1)
