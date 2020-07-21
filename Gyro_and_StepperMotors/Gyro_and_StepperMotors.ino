@@ -1,11 +1,6 @@
-  /*--------------------------------------------------------------------------------------------------------
- * Sensor_MPU6050 VibeSoft reads Gyroscope and Accelerometer values from the MPU-6050 module 
+/*--------------------------------------------------------------------------------------------------------
+ * StepperMotor_DRV88250 VibeSoft drives one stepper motor - using a DRV8825 motor driver 
  * -------------------------------------------------------------------------------------------------------
- * ESP32 have two I2C busses: I2C0 and I2C1.
- * For the WIFI_KIT_32, the OLED is connected to I2C0 (address 0x3C)
- * 
- * Best practise is to use I2C1 for the MPU6050.
- * Note: For I2C1, SDA = GPIO 21 and SCL = GPIO 22 are used (by Wire1)
  * 
  * This code:
  * - Requires the library: TinyMPU6050 (Tools->Manage Library, search and install TinyMPU6050) 
@@ -18,6 +13,10 @@
 #include "heltec.h"
 #include <TinyMPU6050.h>
 #include "images.h"
+
+// DRV8825 GPIO Pins
+#define MOTOR1_STEP 1   // GPIO 1
+#define MOTOR1_DIR 3    // GPIO 3
 
 // Constructing MPU-6050 
 MPU6050 mpu (Wire1);
