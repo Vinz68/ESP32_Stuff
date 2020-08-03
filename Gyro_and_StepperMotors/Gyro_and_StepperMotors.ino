@@ -9,14 +9,13 @@
  * This is a great start to use the MPU6050 on the ESP32 Development board
  * -------------------------------------------------------------------------------------------------------
 */
-#include "Arduino.h"
 #include "heltec.h"
 #include <TinyMPU6050.h>
 #include "images.h"
 
 // DRV8825 GPIO Pins
 #define MOTOR1_STEP 1   // GPIO 1
-#define MOTOR1_DIR 3    // GPIO 3
+#define MOTOR1_DIR 23    // GPIO 23
 
 // Constructing MPU-6050 
 MPU6050 mpu (Wire1);
