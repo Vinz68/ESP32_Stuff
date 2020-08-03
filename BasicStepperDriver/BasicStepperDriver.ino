@@ -3,31 +3,29 @@
  * StepperMotor_DRV88250 VibeSoft drives one stepper motor - using a DRV8825 motor driver 
  * -------------------------------------------------------------------------------------------------------
  * 
- * Connect STEP, DIR as indicated
+ * Connect STEP, DIR and Enable as indicated
  * 
  * This is a great start to use the DRV88250 on the ESP32 Development board
  * -------------------------------------------------------------------------------------------------------
 */
-#include "Arduino.h"
 #include "heltec.h"
-//#include <TinyMPU6050.h>
 #include "images.h"
 #include "BasicStepperDriver.h"
 
 // Define motor pin connections (for DRV8825)
 const int dirPin = 1;       // Direction
-const int stepPin = 3;      // Step (pulse)
+const int stepPin = 23;     // Step (pulse)
 const int enablePin = 2;    // Enable/disable functionality
-const int faultPin = 5;    // Fault (when false)
+const int faultPin = 14;    // Fault (when false)
 
 // Define motor's steps per revolution
 const int stepsPerRevolution = 200;  // MOTOR_STEPS
-const int RotationsPerMinute = 240;  // RPM
+const int RotationsPerMinute = 120;  // RPM
 
 
 // Since microstepping is set externally, make sure this matches the selected mode
 // If it doesn't, the motor will move at a different RPM than chosen
-// 1=full step, 2=half step etc.
+// 1=full step, 2=half , 3=1/4 , 4=1/8, 5=1/16, 6=1/32
 const int microSteps = 1;            // MICROSTEPS 1
 
 // 2-wire basic config, microstepping is hardwired on the driver
@@ -38,14 +36,11 @@ void logo(){
   Heltec.display->clear();
   Heltec.display->drawXbm(0, 0, logo_width, logo_height, (const unsigned char *)logo_bits);
   Heltec.display->drawString(16, 42, "Motor_DRV8825");
-  Heltec.display->drawString(35, 53, "Version 0.1");
+  Heltec.display->drawString(35, 53, "Version 0.3");
   Heltec.display->display();
 }
 
 
-
-//Uncomment line to use enable/disable functionality
-//BasicStepperDriver stepper(MOTOR_STEPS, DIR, STEP, SLEEP);
 
 void setup() {
   Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);

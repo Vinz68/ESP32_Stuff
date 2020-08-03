@@ -10,15 +10,12 @@
  * This is a great start to use the MPU6050 on the ESP32 Development board
  * -------------------------------------------------------------------------------------------------------
 */
-#include <Arduino.h>
-//#include "heltec.h"
-//#include <TinyMPU6050.h>
-//#include "images.h"
+#include "heltec.h"
 
 // Define motor pin connections (for DRV8825)
 const int dirPin = 3;
-const int stepPin = 2;
-const int faultPin = 4;
+const int stepPin = 23;
+const int faultPin = 14;
 
 int val = 0;      // variable to store the read value
 
@@ -27,10 +24,9 @@ const int stepsPerRevolution = 200;
 
 void setup()
 {
-  //Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
+  Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
 
-    Serial.begin (9600);      // only required for debugging. Output some settings in the Serial Monitor Window 
-    
+
   // Declare pins as Outputs
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
