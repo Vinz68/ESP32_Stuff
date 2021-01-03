@@ -27,7 +27,12 @@ ESP32 Development board called *["WiFi Kit 32"](https://heltec.org/project/wifi-
 |  |  |
 | GetrChipID              | Displays the unique internal chip id          | *not applicable* |
 |  |  |
-| Gyro_and_StepperMotors  | Uses a Gyro sensor to drive 2 stepper motors  |                  |
+| Gyro_and_StepperMotors  | Uses a Gyro sensor to drive 2 stepper motors  | Work in Progress!|
+|                         | - Gyro (MPU-9250) is connected via Wire1      | SDA on GPIO 21   |
+|                         |                                               | SCL on GPIO 22   | 
+|                         |                                               | INT on GPIO 2    | 
+|                         | - Motor-1                                     | DIR on GPIO 1    |
+|                         |                                               | STEP on GPIO 23  |
 |  |  |
 | I2C_Scanner_VibeSoft    | Scans for I2C devices on 2nd I2C bus          | SDA on GPIO 21   |
 |                         | Output on OLED display and serial port.       | SCL on GPIO 22   |

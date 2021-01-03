@@ -1,155 +1,143 @@
 /*--------------------------------------------------------------------------------------------------------
- * StepperMotor_DRV88250 VibeSoft drives one stepper motor - using a DRV8825 motor driver 
+ * Gyro_and_StepperMotor drives one stepper motor - using a DRV8825 motor driver 
+ * using input of gyro sensor (MPU-9250)
  * -------------------------------------------------------------------------------------------------------
  * 
  * This code:
- * - Requires the library: TinyMPU6050 (Tools->Manage Library, search and install TinyMPU6050) 
- * - It outputs the same values as the library example: ArduinoIDE_All_Gets_Example 
+ * - Requires the library: MPU9250_asukiaaa (Tools->Manage Library, search and install MPU9250_asukiaaa) 
  * 
- * This is a great start to use the MPU6050 on the ESP32 Development board
+ * This is a great start to use the a stepper motor and the gyro sensor (MPU9250) on the ESP32 Development board
  * -------------------------------------------------------------------------------------------------------
 */
-#include "heltec.h"
-#include <TinyMPU6050.h>
-#include "images.h"
-
-// DRV8825 GPIO Pins
-#define MOTOR1_STEP 1   // GPIO 1
-#define MOTOR1_DIR 23    // GPIO 23
-
-// Constructing MPU-6050 
-MPU6050 mpu (Wire1);
-
-// Angle data 
-float angX, angY, angZ;
-bool firstRun = true;
-
-
-/* Method that prints everything */
-void PrintGets () {
-  // Shows offsets
-  Serial.println("--- Offsets:");
-  Serial.print("GyroX Offset = ");
-  Serial.println(mpu.GetGyroXOffset());
-  Serial.print("GyroY Offset = ");
-  Serial.println(mpu.GetGyroYOffset());
-  Serial.print("GyroZ Offset = ");
-  Serial.println(mpu.GetGyroZOffset());
-  // Shows raw data
-  Serial.println("--- Raw data:");
-  Serial.print("Raw AccX = ");
-  Serial.println(mpu.GetRawAccX());
-  Serial.print("Raw AccY = ");
-  Serial.println(mpu.GetRawAccY());
-  Serial.print("Raw AccZ = ");
-  Serial.println(mpu.GetRawAccZ());
-  Serial.print("Raw GyroX = ");
-  Serial.println(mpu.GetRawGyroX());
-  Serial.print("Raw GyroY = ");
-  Serial.println(mpu.GetRawGyroY());
-  Serial.print("Raw GyroZ = ");
-  Serial.println(mpu.GetRawGyroZ());
-  // Show readable data
-  Serial.println("--- Readable data:");
-  Serial.print("AccX = ");
-  Serial.print(mpu.GetAccX());
-  Serial.println(" m/s²");
-  Serial.print("AccY = ");
-  Serial.print(mpu.GetAccY());
-  Serial.println(" m/s²");
-  Serial.print("AccZ = ");
-  Serial.print(mpu.GetAccZ());
-  Serial.println(" m/s²");
-  Serial.print("GyroX = ");
-  Serial.print(mpu.GetGyroX());
-  Serial.println(" degrees/second");
-  Serial.print("GyroY = ");
-  Serial.print(mpu.GetGyroY());
-  Serial.println(" degrees/second");
-  Serial.print("GyroZ = ");
-  Serial.print(mpu.GetGyroZ());
-  Serial.println(" degrees/second");
-  // Show angles based on accelerometer only
-  Serial.println("--- Accel angles:");
-  Serial.print("AccelAngX = ");
-  Serial.println(mpu.GetAngAccX());
-  Serial.print("AccelAngY = ");
-  Serial.println(mpu.GetAngAccY());
-  // Show angles based on gyroscope only
-  Serial.println("--- Gyro angles:");
-  Serial.print("GyroAngX = ");
-  Serial.println(mpu.GetAngGyroX());
-  Serial.print("GyroAngY = ");
-  Serial.println(mpu.GetAngGyroY());
-  Serial.print("GyroAngZ = ");
-  Serial.println(mpu.GetAngGyroZ());
-  // Show angles based on both gyroscope and accelerometer
-  Serial.println("--- Filtered angles:");
-  Serial.print("FilteredAngX = ");
-  Serial.println(mpu.GetAngX());
-  Serial.print("FilteredAngY = ");
-  Serial.println(mpu.GetAngY());
-  Serial.print("FilteredAngZ = ");
-  Serial.println(mpu.GetAngZ());
-  // Show filter coefficients
-  Serial.println("--- Angle filter coefficients:");
-  Serial.print("Accelerometer percentage = ");
-  Serial.print(mpu.GetFilterAccCoeff());
-  Serial.println('%');
-  Serial.print("Gyroscope percentage = ");
-  Serial.print(mpu.GetFilterGyroCoeff());
-  Serial.println('%');
-}
-
-/* Show info on OLED */
-void logo(){
-  Heltec.display->clear();
-  Heltec.display->drawXbm(0, 0, logo_width, logo_height, (const unsigned char *)logo_bits);
-  Heltec.display->drawString(16, 42, "Sensor_MPU-6050");
-  Heltec.display->drawString(35, 53, "Version 0.1");
-  Heltec.display->display();
-}
-
-
-void setup() {
-  Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
-  logo();
-  delay(5000);
-  Heltec.display->clear();
-
-  Wire1.begin(SDA, SCL);   // Scan the device address via I2C1
-
-  // Initialization
-  mpu.Initialize();
-
-  // Calibration
-  Serial.println("=====================================");
-  Serial.println("Starting calibration...");
-  mpu.Calibrate();
-  Serial.println("Calibration complete!");
-  Heltec.display->clear();
-  Heltec.display->display();
-}
-
-void loop() {
-  mpu.Execute();
-
-  if (firstRun)
-  {
-    PrintGets();
-    firstRun = false;
-    return;
-  }
-
-  // Get X,Y,Z angels and display on OLED
-  angX = mpu.GetAngX();
-  angY = mpu.GetAngY();
-  angZ = mpu.GetAngZ();
-
-  Heltec.display->clear();
-  Heltec.display->drawString(16, 10, "AngX = "+ String(angX));  
-  Heltec.display->drawString(16, 22, "AngY = "+ String(angY));  
-  Heltec.display->drawString(16, 34, "AngZ = "+ String(angZ));  
-  Heltec.display->display();
+/*
+ * MPU-9250     Type      ESP32 / GPIO      pin on ESP32
+  VCC           3.3V      3.3 V             3nd top right (usb up)
+  GND           Ground    GND               1st top right
+  SCL           Clock     SCL I2C1          GPIO 22 - 2nd last right  
+  SDA           Data      SDA I2C1          GPIO 21 - last right   
+  INT           Interrupt                   GPIO 2  - 8th from top right
+ */
  
+#include "heltec.h"
+#include "WiFi.h"
+#include "images.h"
+#include <MPU9250_asukiaaa.h>
+
+#define SDA_PIN 21
+#define SCL_PIN 22
+
+MPU9250_asukiaaa MpuSensor;
+float aX, aY, aZ, aSqrt;
+float gX, gY, gZ;
+float mX, mY, mZ, mDirection;
+
+static uint32_t prev_ms = millis();
+uint8_t sensorId;
+
+void logo(){
+  Heltec.display -> clear();
+  Heltec.display -> drawXbm(0,0,logo_width,logo_height,(const unsigned char *)logo_bits);
+  Heltec.display -> drawString( 8, 42, "Gyro_Stepper_VibeSoft"); 
+  Heltec.display -> drawString(35, 53, "Version 0.1");   
+  Heltec.display -> display();
+}
+
+void setup()
+{
+  // Initialize the Wifi_Kit_32 with its OLED and enable Serial port on 115200 baud.
+  Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
+  Serial.println("Setup started & Heltec ESP332 initialized");
+  
+  Serial.println("Show Logo...");  
+  logo();
+
+  Serial.println("Wire.Begin...");  
+  Wire.begin(SDA_PIN, SCL_PIN);
+
+  delay(3000);
+  Heltec.display->clear();
+
+  Serial.println("MPU9250 Setup...");
+  MpuSensor.setWire(&Wire);  
+  MpuSensor.beginAccel();
+  MpuSensor.beginGyro();
+  MpuSensor.beginMag();
+
+  // You can set your own offset for mag values
+  // MpuSensor.magXOffset = -50;
+  // MpuSensor.magYOffset = -55;
+  // MpuSensor.magZOffset = -10;
+
+  delay(3000);
+
+  if (MpuSensor.readId(&sensorId) == 0) {
+    Serial.println("sensorId: " + String(sensorId));
+  } else {
+    Serial.println("Cannot read sensorId");
+  }  
+
+  prev_ms = millis();
+  
+  Serial.println("Setup ended.");
+}
+
+
+
+void loop()
+{
+    // Every 250 msec => output the sensor values
+    if ((millis() - prev_ms) >= 250)
+    {
+        prev_ms = millis();
+        Serial.print(String(millis()) + "ms : ");
+      
+        if (MpuSensor.accelUpdate() == 0) {
+          aX = MpuSensor.accelX();
+          aY = MpuSensor.accelY();
+          aZ = MpuSensor.accelZ();
+          aSqrt = MpuSensor.accelSqrt();
+  
+          Serial.print("accel X,Y,Z: ");
+          Serial.print(aX);
+          Serial.print(" , ");
+          Serial.print(aY);
+          Serial.print(" , ");
+          Serial.print(aZ);
+          Serial.print("  aSqrt: "); 
+          Serial.print(aSqrt); 
+        } else {
+          Serial.println("Cannot read ACCEL values");
+        }        
+            
+
+        if (MpuSensor.gyroUpdate() == 0) {
+          gX = MpuSensor.gyroX();
+          gY = MpuSensor.gyroY();
+          gZ = MpuSensor.gyroZ();
+          Serial.print("  gyro X,Y,Z: ");
+          Serial.print(gX);
+          Serial.print(" , ");
+          Serial.print(gY);
+          Serial.print(" , ");
+          Serial.print(gZ);      
+        } else {
+          Serial.println("Cannot read GYRO values");
+        }        
+
+        if (MpuSensor.magUpdate() == 0) {
+          mX = MpuSensor.magX();
+          mY = MpuSensor.magY();
+          mZ = MpuSensor.magZ();
+          mDirection = MpuSensor.magHorizDirection();
+          Serial.print("  Mag X,Y,Z: ");
+          Serial.print(mX);
+          Serial.print(" , ");
+          Serial.print(mY);
+          Serial.print(" , ");
+          Serial.print(mZ); 
+          Serial.println(" horizontal direction: " + String(mDirection));
+        } else {
+          Serial.println("Cannot read MAG values");
+        }
+    }
 }
